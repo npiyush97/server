@@ -76,7 +76,7 @@ app.put("/put/:id", (req, res) => {
     .catch((err) => {
       console.log("Error");
     });
-  const sqlUpdate = "UPDATE contacts SET otp=?,datetime=? WHERE phone=?";
+  const sqlUpdate = "UPDATE contacts SET otp=?,datetime=? WHERE ID=?";
   db.query(sqlUpdate, [otp, today, id], (err, result) => {
     if (err) {
       console.log(err);
