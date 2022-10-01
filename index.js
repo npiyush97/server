@@ -15,7 +15,6 @@ const db = mysql.createPool({
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
-    timezone: 'utc'
 });
 
 app.use(cors());
@@ -63,7 +62,6 @@ app.put("/put/:id", (req, res) => {
   let year = time.getFullYear()
   let hourmin = time.getHours()  > 12 ? `${time.getHours() - 12}:${time.getMinutes()} PM` : `${time.getHours()}:${time.getMinutes()} AM`
   let today = `${date}-${month}-${year} : ${hourmin}`;
-
   twilio.messages
     .create({
       from: process.env.TWILIO_NUMBER,
