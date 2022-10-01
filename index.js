@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql2');
+const hostname = process.env.HOSTNAME || localhost 
 const PORT = process.env.PORT || 5000
 require('dotenv').config()
 var accountSid = process.env.SID
@@ -89,5 +90,5 @@ app.put("/api/edit:id", (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`Server running at 5000 http://localhost:5000`)
+    console.log(`Server running at 5000 http://${hostname}:${PORT}`)
 })
