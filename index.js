@@ -56,14 +56,14 @@ app.get("/api/get/:id", (req, res) => {
 });
 app.put("/put/:id", (req, res) => {
   const { id } = req.params;
-  const { randomNum, dandt } = req.body;
+  const { randomNum, dandt,phone } = req.body;
   let today = new Date(dandt);
   let hrmin = `${today.getHours()}:${today.getMinutes()}`;
   let date = `${today.getDate()}/${today.getMonth()}/${today.getFullYear()}`;
   twilio.messages
     .create({
       from: process.env.TWILIO_NUMBER,
-      to: `+91${id}`,
+      to: `+91${phone}`,
       body: `Hi! Your OTP is ${randomNum}`,
     })
     .then((res) => {
