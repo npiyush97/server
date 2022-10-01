@@ -61,9 +61,9 @@ app.put("/put/:id", (req, res) => {
   let date = time.getDate()
   let month = time.getMonth() + 1
   let year = time.getFullYear()
-  let hour = time.getHours()  > 12 ? `${time.getHours - 12} PM` : time.getHours()
-  let minute = time.getMinutes()
-  let today = `${date}-${month}-${year}:${hour}:${minute}`;
+  let hourmin = time.getHours()  > 12 ? `${time.getHours() - 12}:${time.getMinutes()} PM` : `${time.getHours()}:${time.getMinutes()} AM`
+  let today = `${date}-${month}-${year} : ${hourmin}`;
+
   twilio.messages
     .create({
       from: process.env.TWILIO_NUMBER,
