@@ -15,6 +15,7 @@ const db = mysql.createPool({
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
+  timezone: "utc",
 });
 
 app.use(cors());
@@ -55,18 +56,15 @@ app.get("/api/get/:id", (req, res) => {
 });
 app.put("/put/:id", (req, res) => {
   const { id } = req.params;
-  const otp = req.body.randomNum;
-  let time = new Date();
-  let date = time.getDate()
-  let month = time.getMonth() + 1
-  let year = time.getFullYear()
-  let hourmin = time.getHours()  > 12 ? `${time.getHours() - 12}:${time.getMinutes()} PM` : `${time.getHours()}:${time.getMinutes()} AM`
-  let today = `${date}-${month}-${year} : ${hourmin}`;
+  const { randomNum, dandt } = req.body;
+  let today = new Date(dandt);
+  let hrmin = `${today.getHours()}:${today.getMinutes()}`;
+  let date = `${today.getDate()}/${today.getMonth()}/${today.getFullYear()}`;
   twilio.messages
     .create({
       from: process.env.TWILIO_NUMBER,
       to: `+91${id}`,
-      body: `Hi! Your OTP is ${otp}`,
+      body: `Hi! Your OTP is ${randomNum}`,
     })
     .then((res) => {
       console.log("Message Sent");
@@ -74,8 +72,9 @@ app.put("/put/:id", (req, res) => {
     .catch((err) => {
       console.log("Error");
     });
-  const sqlUpdate = "UPDATE contacts SET otp=?,datetime=? WHERE ID=?";
-  db.query(sqlUpdate, [otp, today, id], (err, result) => {
+  const sqlUpdate =
+    "UPDATE contacts SET otp=?,date=?,time=?,timestamp=? WHERE ID=?";
+  db.query(sqlUpdate, [randomNum, date, hrmin, dandt, id], (err, result) => {
     if (err) {
       console.log(err);
     }
