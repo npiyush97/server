@@ -56,10 +56,8 @@ app.get("/api/get/:id", (req, res) => {
 });
 app.put("/put/:id", (req, res) => {
   const { id } = req.params;
-  const { randomNum, dandt,phone } = req.body;
-  let today = new Date(dandt);
-  let hrmin = `${today.getHours()}:${today.getMinutes()}`;
-  let date = `${today.getDate()}/${today.getMonth()}/${today.getFullYear()}`;
+  const { randomNum, date,time,phone } = req.body;
+  let today = Date.now();
   twilio.messages
     .create({
       from: process.env.TWILIO_NUMBER,
@@ -74,7 +72,7 @@ app.put("/put/:id", (req, res) => {
     });
   const sqlUpdate =
     "UPDATE contacts SET otp=?,date=?,time=?,timestamp=? WHERE ID=?";
-  db.query(sqlUpdate, [randomNum, date, hrmin, dandt, id], (err, result) => {
+  db.query(sqlUpdate, [randomNum, date, time, today, id], (err, result) => {
     if (err) {
       console.log(err);
     }
